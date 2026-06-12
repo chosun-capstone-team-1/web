@@ -1,0 +1,41 @@
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local runtime/cache
+.omx/
+.playwright-mcp/
+*.log
+*.pid
+*.tmp
+*.bak
+
+# Frontend dependencies/build
+frontend/frontend/node_modules/
+frontend/frontend/dist/
+frontend/frontend/.vite/
+frontend/frontend/.env
+frontend/frontend/.env.*.local
+frontend/frontend/*.png
+frontend-*.png
+
+# Backend runtime/env
+backend/.env
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/temp_uploads/
+*.pyc
+
+# Large ML model weights - place manually on the server
+backend/models/*.pth
+backend/models/*.pkl
+backend/app/assets/*.pth
+backend/app/assets/*.pkl
+*.pth
+*.pkl
+
+# Local git metadata backups
+.git-backups/

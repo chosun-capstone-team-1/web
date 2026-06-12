@@ -1,0 +1,43 @@
+# Python 관련 불필요 파일
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+
+# 모델 가중치 및 중간 결과
+*.pth
+*.pt
+*.pkl
+*.h5
+*.onnx
+
+# Jupyter, Colab 등
+.ipynb_checkpoints/
+
+# 환경파일 (필요 시 제외하지 마세요)
+.env
+
+# 가상환경
+venv/
+env/
+.venv/
+
+# macOS / Linux / Windows 시스템 파일
+.DS_Store
+Thumbs.db
+
+# VSCode 관련
+.vscode/
+
+# Docker 자체
+Dockerfile~
+docker-compose.yml~
+
+# 빌드된 결과물
+*.whl
+dist/
+build/
+
+# 기타 캐시
+__cache__/
+*.egg-info/

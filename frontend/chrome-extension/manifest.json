@@ -1,0 +1,19 @@
+{
+  "name": "CSEC",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "파일 다운로드시 자동 분석 검증",
+  "permissions": ["downloads", "notifications", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon.png",
+    "48": "icons/icon.png",
+    "128": "icons/icon.png"
+  },
+  "action": {
+    "default_icon": "icons/icon.png"
+  },
+  "host_permissions": ["<all_urls>"]
+}

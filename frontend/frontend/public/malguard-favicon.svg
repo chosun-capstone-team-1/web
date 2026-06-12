@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MalGuard">
+  <rect width="64" height="64" rx="14" fill="#eef2f7"/>
+  <path d="M32 8 52 18v14c0 12.4-8.1 19.8-20 24-11.9-4.2-20-11.6-20-24V18L32 8Z" fill="#ffffff" stroke="#536785" stroke-width="3"/>
+  <path d="M24 33.5 29.2 39 41 25" fill="none" stroke="#536785" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

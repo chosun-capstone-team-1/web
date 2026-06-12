@@ -1,0 +1,75 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+debug.log
+test-output.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules
+
+# Build outputs
+dist
+dist-ssr
+.vite
+.next/
+.turbo/
+.cache/
+coverage/
+.vercel
+netlify.toml
+
+# Local environment files
+*.local
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.production.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Database and temp files
+*.sqlite3
+*.bak
+*.tmp
+
+# Lock files
+yarn.lock   
+
+# Local Netlify folder
+.netlify
+
+# Test and debug utilities
+*.test.js
+__tests__/
+__mocks__/
+playwright-report/
+cypress/videos/
+cypress/screenshots/
+
+# Scripts and VSCode settings (excluded from Git)
+restructure.sh
+setup-vscode-settings.sh
+frontend/.vscode/settings.json
+
+dummy.exe
