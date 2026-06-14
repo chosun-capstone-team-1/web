@@ -24,7 +24,8 @@ from fastapi import UploadFile
 
 
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 system = platform.system()
 if system == "Darwin":  # macOS
@@ -57,6 +58,9 @@ class CustomPDF(FPDF):
 
 
 def ask_gpt_for_recommendations(summary_text: str) -> str:
+    if client is None:
+        return "GPT 권장사항은 비활성화되었습니다. OPENAI_API_KEY를 설정하면 사용할 수 있습니다."
+
     if summary_text in _gpt_cache:
         return _gpt_cache[summary_text]
 
@@ -216,7 +220,7 @@ def generate_final_pdf_report(file: UploadFile, result: dict, model_name=None):
 
     def create_pie_chart(malicious_percent):
         benign_percent = 100 - malicious_percent
-        labels = ['악성 : {:.1f}%'.format(malicious_percent), '정상 : {:.1f}%'.format(benign_percent)]
+        labels = ['Malicious : {:.1f}%'.format(malicious_percent), 'Benign : {:.1f}%'.format(benign_percent)]
         sizes = [malicious_percent, benign_percent]
         colors = ['#C084FC', '#93C5FD']
 
@@ -250,6 +254,8 @@ def generate_final_pdf_report(file: UploadFile, result: dict, model_name=None):
 
     now = datetime.now(pytz.timezone("Asia/Seoul")).strftime("%Y/%m/%d %H:%M:%S")
     malicious_percent = round(confidence * 100, 1)
+    primary_percent = malicious_percent if detection_result == "악성" else round((100 - malicious_percent), 1)
+    primary_label = "악성 확률" if detection_result == "악성" else "정상 확률"
     chart_path = create_pie_chart(malicious_percent)
 
 
@@ -266,7 +272,7 @@ def generate_final_pdf_report(file: UploadFile, result: dict, model_name=None):
     pdf.image(logo_path, x=10, y=10, w=45)
     pdf.set_xy(150, 10)
     pdf.set_font("Noto", "", 9)
-    pdf.multi_cell(0, 6, "65, Chosundae 5-gil, Dong-gu\nSouth Korea, Gwangju 61452\nhttps://ict.chosun.ac.kr", align='R')
+    pdf.multi_cell(0, 6, "65, Chosundae 5-gil, Dong-gu\nSouth Korea, Gwangju 61452", align='R')
 
     pdf.set_xy(10, 38)
     pdf.set_font("Noto", "B", 18)
@@ -300,12 +306,12 @@ def generate_final_pdf_report(file: UploadFile, result: dict, model_name=None):
     pdf.set_font("Noto", "", 12)
     pdf.cell(0, 10, f"탐지 결과 : {detection_result}")
     pdf.ln(8)
-    pdf.cell(0, 10, f"신뢰도 (Confidence) : {test_acc:.2f} %")
+    pdf.cell(0, 10, f"{primary_label} : {primary_percent:.1f} %")
     pdf.ln(8)
 
     pdf.set_text_color(100)
     pdf.set_font("Noto", "", 10)
-    pdf.multi_cell(0, 8, "※ 본 보고서에서의 신뢰도는 모델의 성능을 의미합니다.")
+    pdf.multi_cell(0, 8, f"※ 원형표는 개별 파일의 예측 확률을 의미합니다. 모델 정확도는 {test_acc:.2f}%입니다.")
     pdf.set_text_color(0)
     pdf.set_font("Noto", "", 12)
     pdf.ln(10)
@@ -317,7 +323,7 @@ def generate_final_pdf_report(file: UploadFile, result: dict, model_name=None):
 
     pdf.cell(0, 10, f"해당 \"{file_name}\" 파일은 {detection_result}으로 탐지되었으며,", align='C')
     pdf.ln(8)
-    pdf.cell(0, 10, f"{malicious_percent:.1f}%의 탐지 확률을 기반으로 판단됩니다.", align='C')
+    pdf.cell(0, 10, f"{malicious_percent:.1f}%의 악성 예측 확률을 기반으로 판단됩니다.", align='C')
     pdf.ln(10)
 
     pdf.set_text_color(100)

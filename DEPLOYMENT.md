@@ -120,6 +120,36 @@ Nginx 설정 예시는 [`nginx/ec2.conf`](nginx/ec2.conf) 입니다.
 6. `sudo ln -sf /etc/nginx/sites-available/malguard.conf /etc/nginx/sites-enabled/malguard.conf`
 7. `sudo nginx -t && sudo systemctl reload nginx`로 Nginx를 반영합니다.
 
+## EC2 재부팅 후 자동 실행
+
+Docker와 Nginx는 부팅 시 자동 시작되도록 `enabled` 상태로 두고, compose 스택은 systemd 서비스로 자동 기동합니다.
+
+```bash
+sudo systemctl enable docker
+sudo systemctl enable nginx
+
+sudo cp /home/ubuntu/web/deployment/systemd/malguard-compose.service /etc/systemd/system/malguard-compose.service
+sudo systemctl daemon-reload
+sudo systemctl enable malguard-compose.service
+sudo systemctl start malguard-compose.service
+sudo systemctl status malguard-compose.service
+```
+
+EC2를 중지했다가 다시 시작한 뒤에는 아래 순서로 확인합니다.
+
+```bash
+sudo systemctl status docker nginx malguard-compose.service
+cd /home/ubuntu/web
+docker compose ps
+curl http://127.0.0.1/
+curl http://127.0.0.1/api/docs
+```
+
+브라우저에서는 아래 주소를 확인합니다.
+
+- `http://3.39.31.114`
+- `http://3.39.31.114/api/docs`
+
 ## 접속 확인
 
 ```bash
