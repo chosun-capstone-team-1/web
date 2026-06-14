@@ -34,7 +34,7 @@ export default function AnalysisPage({ handleFileSelect }) {
         <article className="step-card">
           <span>3</span>
           <h3>결과 리포트</h3>
-          <p>판정, confidence, 대응 방법을 확인합니다.</p>
+          <p>판정, 악성 확률, 대응 방법을 확인합니다.</p>
         </article>
       </section>
     </div>

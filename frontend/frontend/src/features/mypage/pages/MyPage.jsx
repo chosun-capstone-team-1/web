@@ -6,7 +6,6 @@ import {
   HISTORY_DOWNLOAD_PATH,
   formatDate,
   getAccessToken,
-  getConfidence,
   getErrorMessage,
   getResultLabel,
   normalizePercent,
@@ -158,7 +157,9 @@ export default function MyPage() {
               <tbody>
                 {filteredRecords.map((record) => {
                   const label = getResultLabel(record);
-                  const confidence = getConfidence(record);
+                  const confidence = label === '악성'
+                    ? normalizePercent(record.malicious, 0)
+                    : normalizePercent(record.normal, 0);
                   const reportUrl = resolveReportUrl(record.report_url);
                   return (
                     <React.Fragment key={record.analysis_id}>

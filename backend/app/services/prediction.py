@@ -7,6 +7,7 @@ from torchvision import transforms
 from app.models.cnn_model import ExeCNN_AdaptiveAvgPool_Dropout, SimpleCNN
 from app.models.rf_model import RandomForestPDFModel
 from app.models.auto_encoder_model import AEWithClassifier
+from app.utils.model_info import get_model_performance_score
 from app.utils.file_processing import CONVERTER_MAP
 from app.utils.performance_timer import InferenceTimer
 
@@ -18,19 +19,21 @@ MODEL_DIRS = [
     os.path.join(BACKEND_ROOT, "app", "assets"),  # legacy fallback path
 ]
 
-# 정확도 맵 (하드코딩 값은 향후 동적 추출로 확장 가능)
-ACCURACY_MAP = {
-    "exe": 95.61,
-    "pdf": 93.42,
-    "hwp": 94.00,
-    "docx": 79.00,
-    "xlsx": 76.00,
-}
-
 PREFERRED_MODEL_FILENAMES = {
     "exe": ["CNN_exe.pth"],
     "pdf": ["Randomforest_pdf.pkl"],
 }
+
+ACCURACY_MAP = {
+    ext: get_model_performance_score(ext).get("Accuracy")
+    for ext in ("exe", "pdf", "hwp", "docx", "xlsx")
+    if get_model_performance_score(ext).get("Accuracy") is not None
+}
+
+
+def _get_model_accuracy(ext: str):
+    perf = get_model_performance_score(ext)
+    return perf.get("Accuracy")
 
 
 def _available_model_dirs():
@@ -167,7 +170,7 @@ def predict(file_path: str, file_ext: str):
     try:
         prediction, _, _, timer = _run_prediction(file_path, ext)
         result = "악성" if prediction == 1 else "정상"  # class mapping: Benign=0, Malware=1
-        accuracy = ACCURACY_MAP.get(ext, None)
+        accuracy = _get_model_accuracy(ext)
     except Exception as e:
         timer = InferenceTimer()
         result = f"에러 발생: {str(e)}"
@@ -201,7 +204,7 @@ def predict_full_report_data(file_path: str, file_ext: str):
     try:
         prediction, normal_score, malicious_score, timer = _run_prediction(file_path, ext)
         result = "악성" if prediction == 1 else "정상"
-        accuracy = ACCURACY_MAP.get(ext, None)
+        accuracy = _get_model_accuracy(ext)
     except Exception as e:
         timer = InferenceTimer()
         result = f"에러 발생: {str(e)}"

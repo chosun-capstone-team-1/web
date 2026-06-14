@@ -1,11 +1,16 @@
 ### app/services/auth_service/auth.py
 
-from passlib.context import CryptContext
-from jose import jwt, JWTError
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 
-SECRET_KEY = "your_secret_key_here"
+from dotenv import load_dotenv
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY", "your_secret_key_here")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

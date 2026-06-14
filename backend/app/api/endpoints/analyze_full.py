@@ -128,7 +128,9 @@ async def analyze_full(
     log_data = result_data.get("log", {})
     result_label = "악성" if prob_data["malicious"] >= 60 else "정상"
 
-    confidence = ACCURACY_MAP.get(ext, None)
+    confidence = result_data.get("accuracy")
+    if confidence is None:
+        confidence = ACCURACY_MAP.get(ext, None)
     summary = f"해당 \"{file.filename}\" 파일은 {result_label}으로 탐지되었으며, {prob_data['malicious']:.1f}%의 탐지 확률을 기반으로 판단됩니다."
 
     analysis_id = uuid.uuid4()
@@ -159,7 +161,7 @@ async def analyze_full(
             sha256=file_hash,
             result=result_label,
             #confidence=result_data.get("confidence"),
-            confidence = float(result_data.get("confidence", 0.0)),
+            confidence = float(confidence or 0.0),
             summary=summary,
             report_url=static_url,
             # normal=round(prob_data["normal"], 2),

@@ -43,12 +43,17 @@ function AnalysisResults() {
   const result = useMemo(() => {
     if (!fileData) return null;
     const malicious = isMaliciousResult(fileData);
+    const displayPercent = malicious
+      ? normalizePercent(fileData.malicious, 0)
+      : normalizePercent(fileData.normal, 0);
     return {
       malicious,
       label: getResultLabel(fileData),
-      confidence: getConfidence(fileData),
+      modelAccuracy: getConfidence(fileData),
       normal: normalizePercent(fileData.normal, 0),
       maliciousPercent: normalizePercent(fileData.malicious, 0),
+      displayPercent,
+      displayLabel: malicious ? "악성 확률" : "정상 확률",
       reportUrl: resolveReportUrl(fileData.report_url),
     };
   }, [fileData]);
@@ -91,8 +96,8 @@ function AnalysisResults() {
       <section className="result-top-grid">
         <article className={`verdict-report-card ${result.malicious ? "danger" : "safe"}`}>
           <div className="score-ring">
-            <strong>{result.confidence ?? "N/A"}{result.confidence !== null ? "%" : ""}</strong>
-            <span>score</span>
+            <strong>{result.displayPercent ?? "N/A"}{result.displayPercent !== null ? "%" : ""}</strong>
+            <span>{result.displayLabel}</span>
           </div>
           <div className="verdict-copy">
             <span className={`status-badge ${result.malicious ? "danger" : "safe"}`}>{result.label}</span>
@@ -148,6 +153,7 @@ function AnalysisResults() {
           <dl className="info-list compact-info-list">
             <div><dt>Analyzed At</dt><dd>{formatDate(completedAt)}</dd></div>
             <div><dt>Extension</dt><dd>{fileData.extension || ".exe"}</dd></div>
+            <div><dt>Model Accuracy</dt><dd>{result.modelAccuracy ?? "N/A"}%</dd></div>
             <div><dt>Report</dt><dd>{result.reportUrl ? "생성됨" : "없음"}</dd></div>
           </dl>
         </article>

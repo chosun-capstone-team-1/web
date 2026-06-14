@@ -34,7 +34,9 @@ export function normalizePercent(value, fallback = null) {
 
 export function getConfidence(data) {
   const fromResponse = normalizePercent(data?.confidence, null);
-  if (fromResponse !== null) return fromResponse;
+  if (fromResponse !== null && fromResponse > 0) return fromResponse;
+  const modelAccuracy = normalizePercent(data?.model_info?.test_accuracy, null);
+  if (modelAccuracy !== null && modelAccuracy > 0) return modelAccuracy;
   const normal = normalizePercent(data?.normal, 0);
   const malicious = normalizePercent(data?.malicious, 0);
   return Math.max(normal, malicious);

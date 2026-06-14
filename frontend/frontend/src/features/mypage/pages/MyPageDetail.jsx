@@ -11,6 +11,10 @@ export default function MyPageDetail({ file }) {
   if (!file) return <div className="alert alert-danger">파일 정보가 없습니다.</div>;
   const normal = normalizePercent(file.normal, 0);
   const malicious = normalizePercent(file.malicious, 0);
+  const isMalicious = getResultLabel(file) === "악성";
+  const primaryPercent = isMalicious ? malicious : normal;
+  const primaryLabel = isMalicious ? "악성 확률" : "정상 확률";
+  const modelAccuracy = getConfidence(file);
   const reportUrl = resolveReportUrl(file.report_url);
 
   return (
@@ -20,7 +24,8 @@ export default function MyPageDetail({ file }) {
           <h3>분석 요약</h3>
           <p>{file.summary || `${getResultLabel(file)} 파일로 판별되었습니다.`}</p>
           <dl className="info-list compact-list">
-            <div><dt>신뢰도</dt><dd>{getConfidence(file)}%</dd></div>
+            <div><dt>{primaryLabel}</dt><dd>{primaryPercent}%</dd></div>
+            <div><dt>모델 정확도</dt><dd>{modelAccuracy}%</dd></div>
             <div><dt>정상 확률</dt><dd>{normal}%</dd></div>
             <div><dt>악성 확률</dt><dd>{malicious}%</dd></div>
           </dl>
