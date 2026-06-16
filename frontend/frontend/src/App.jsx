@@ -17,8 +17,8 @@ function NotFound() {
     <section className="security-card empty-state">
       <span className="empty-icon">404</span>
       <h1>페이지를 찾을 수 없습니다</h1>
-      <p>현재 제공되는 기능은 EXE 파일 분석과 로그인 사용자 분석 기록입니다.</p>
-      <Link to="/" className="btn btn-primary">EXE 파일 분석으로 이동</Link>
+      <p>현재 제공되는 기능은 악성파일 분석과 로그인 사용자 분석 기록입니다.</p>
+      <Link to="/" className="btn btn-primary">파일 분석으로 이동</Link>
     </section>
   );
 }

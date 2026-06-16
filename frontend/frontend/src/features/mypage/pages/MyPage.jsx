@@ -108,7 +108,7 @@ export default function MyPage() {
       <section className="history-header-row">
         <div>
           <h1>분석 기록</h1>
-          <p>로그인 사용자의 EXE 파일 분석 내역을 확인합니다.</p>
+          <p>로그인 사용자의 악성파일 분석 내역을 확인합니다.</p>
         </div>
       </section>
 
@@ -138,7 +138,7 @@ export default function MyPage() {
           <div className="empty-state small">
             <span className="empty-icon">⌕</span>
             <h2>아직 분석 기록이 없습니다.</h2>
-            <p>EXE 파일 분석을 완료하면 이곳에 기록이 표시됩니다.</p>
+            <p>악성파일 분석을 완료하면 이곳에 기록이 표시됩니다.</p>
           </div>
         )}
 

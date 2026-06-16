@@ -8,7 +8,13 @@ import {
   saveAnalysisResult,
 } from "../../../utils/analysis";
 
-const isExeFile = (file) => file?.name?.toLowerCase().endsWith(".exe");
+const ACCEPTED_FILE_TYPES = ".exe,.pdf,application/pdf,application/x-msdownload,application/vnd.microsoft.portable-executable";
+const SUPPORTED_EXTENSIONS = [".exe", ".pdf"];
+
+const isSupportedFile = (file) => {
+  const name = file?.name?.toLowerCase() || "";
+  return SUPPORTED_EXTENSIONS.some((extension) => name.endsWith(extension));
+};
 
 function FileUpload({ onFileSelect }) {
   const inputRef = useRef(null);
@@ -20,9 +26,9 @@ function FileUpload({ onFileSelect }) {
 
   const setFileSafely = (file) => {
     if (!file) return;
-    if (!isExeFile(file)) {
+    if (!isSupportedFile(file)) {
       setSelectedFile(null);
-      setError("EXE 파일만 업로드할 수 있습니다.");
+      setError("악성파일만 업로드할 수 있습니다.");
       return;
     }
     setError("");
@@ -43,11 +49,11 @@ function FileUpload({ onFileSelect }) {
 
   const analyze = async () => {
     if (!selectedFile) {
-      setError("분석할 EXE 파일을 먼저 선택해주세요.");
+      setError("분석할 악성파일을 먼저 선택해주세요.");
       return;
     }
-    if (!isExeFile(selectedFile)) {
-      setError("EXE 파일만 업로드할 수 있습니다.");
+    if (!isSupportedFile(selectedFile)) {
+      setError("악성파일만 업로드할 수 있습니다.");
       return;
     }
 
@@ -109,15 +115,15 @@ function FileUpload({ onFileSelect }) {
       >
         <input
           ref={inputRef}
-          id="exe-upload-input"
+          id="analysis-upload-input"
           type="file"
-          accept=".exe,application/x-msdownload,application/vnd.microsoft.portable-executable"
+          accept={ACCEPTED_FILE_TYPES}
           className="sr-only"
           onChange={handleFileChange}
         />
         <div className="upload-icon">⇧</div>
-        <h3>분석할 EXE 파일 선택 또는 드래그</h3>
-        <p>Windows 실행 파일(.exe)만 업로드할 수 있습니다.</p>
+        <h3>분석할 악성파일 선택 또는 드래그</h3>
+        <p>악성파일을 업로드할 수 있습니다.</p>
         <button type="button" className="btn btn-secondary">파일 선택</button>
       </div>
 

@@ -16,6 +16,7 @@ router = APIRouter()
 ## 비로그인 시 파일 업로드 횟수 제한
 MAX_UPLOAD_LIMIT = 3
 TTL_SECONDS = 3600 * 24  # 24시간 제한
+SUPPORTED_EXTENSIONS = {"exe", "pdf"}
 
 
 def _parse_log_datetime(value):
@@ -31,9 +32,17 @@ def _parse_log_datetime(value):
     return None
 
 
-def _ensure_supported_exe(ext: str, contents: bytes):
-    if ext != "exe":
-        raise HTTPException(status_code=400, detail="EXE 파일만 업로드할 수 있습니다.")
+def _ensure_supported_upload(ext: str, contents: bytes):
+    if ext not in SUPPORTED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="EXE 또는 PDF 파일만 업로드할 수 있습니다.")
+
+    if ext == "pdf":
+        if b"%PDF-" not in contents[:1024]:
+            raise HTTPException(
+                status_code=400,
+                detail="유효한 PDF 파일이 아닙니다. PDF 문서 형식이 아니면 분석할 수 없습니다."
+            )
+        return
 
     is_valid_pe = False
     if len(contents) >= 0x40 and contents[:2] == b"MZ":
@@ -95,7 +104,7 @@ async def analyze_full(
 
     contents = await file.read()
     ext = os.path.splitext(file.filename)[1].lstrip(".").lower()
-    _ensure_supported_exe(ext, contents)
+    _ensure_supported_upload(ext, contents)
 
     # 파일 저장
     with open(save_path, "wb") as f:

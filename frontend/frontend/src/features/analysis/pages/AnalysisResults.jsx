@@ -63,8 +63,8 @@ function AnalysisResults() {
       <section className="security-card empty-state">
         <span className="empty-icon">⌕</span>
         <h1>분석 결과가 없습니다</h1>
-        <p>결과 화면은 EXE 파일 분석을 완료한 뒤 확인할 수 있습니다.</p>
-        <Link to="/" className="btn btn-primary">EXE 파일 분석으로 돌아가기</Link>
+        <p>결과 화면은 악성파일 분석을 완료한 뒤 확인할 수 있습니다.</p>
+        <Link to="/" className="btn btn-primary">파일 분석으로 돌아가기</Link>
       </section>
     );
   }

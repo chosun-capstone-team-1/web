@@ -1,6 +1,9 @@
 # Model files
 
-Place runtime model weights here when provided locally.
+Place runtime model files in this directory when running locally or on EC2.
 
-- `CNN_exe.pth` is required by the project requirements but is intentionally ignored by git.
-- Do not commit `.pth` model files.
+- `backend/models/CNN_exe.pth`
+- `backend/models/Randomforest_pdf.pkl`
+
+These files are intentionally ignored by git. Do not commit `.pth` or `.pkl`
+model files.

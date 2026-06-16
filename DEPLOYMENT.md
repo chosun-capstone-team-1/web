@@ -6,7 +6,7 @@
 - DB: PostgreSQL 13, `backend/docker-compose.yml`의 `db` 서비스로 실행
 - Redis: 업로드 제한 카운터 저장용, `backend/docker-compose.yml`의 `redis` 서비스로 실행
 - Frontend: Vite React 앱, Docker Compose의 frontend 컨테이너 또는 Nginx로 서빙
-- 모델 파일: `Model/CNN_exe.pth`를 backend 컨테이너의 `/app/models/CNN_exe.pth`로 마운트
+- 모델 파일: `backend/models/CNN_exe.pth`, `backend/models/Randomforest_pdf.pkl`을 backend 컨테이너의 `/app/models/`로 마운트
 
 ## EC2 Ubuntu 설치 항목
 
@@ -81,6 +81,38 @@ backend만 따로 올릴 때는 기존처럼 `backend/`에서 `docker compose up
 127.0.0.1:8000 -> backend container
 ```
 
+## 로컬 Docker Compose 실행
+
+로컬 PC에 Nginx를 직접 설치하지 않아도 `docker-compose.local.yml`이 reverse proxy 컨테이너를 함께 실행합니다.
+
+모델 파일은 git에 올리지 않고 아래 위치에 직접 둡니다.
+
+```bash
+backend/models/CNN_exe.pth
+backend/models/Randomforest_pdf.pkl
+```
+
+로컬 실행은 프로젝트 루트에서 아래 명령을 사용합니다.
+
+```bash
+docker compose -f docker-compose.local.yml up -d --build
+```
+
+로컬 reverse proxy 기준 경로는 아래와 같습니다.
+
+- `http://localhost:8080/` -> frontend
+- `http://localhost:8080/api/...` -> backend
+- `http://localhost:8080/api/docs` -> backend Swagger UI
+- `http://localhost:8080/openapi.json` -> backend OpenAPI JSON
+
+확인은 아래 명령으로 합니다.
+
+```bash
+curl http://localhost:8080/
+curl http://localhost:8080/api/docs
+curl http://localhost:8080/openapi.json
+```
+
 중지할 때는 아래를 사용합니다.
 
 ```bash
@@ -92,7 +124,7 @@ docker compose down
 
 현재 프론트엔드는 `frontend/frontend/src/utils/analysis.js`에서 `VITE_API_BASE_URL`을 읽고, 기본값이 `/api`입니다.
 
-EC2에서 backend를 직접 호출할 때도 프론트 코드는 `/api`를 사용합니다. 배포 빌드에서는 이미 기본값이 `/api`라서 별도 주소를 넣지 않아도 됩니다.
+EC2와 로컬 reverse proxy 모두 프론트 코드는 절대주소 `localhost:8000` 대신 `/api`를 사용합니다. 배포 빌드에서는 이미 기본값이 `/api`라서 별도 주소를 넣지 않아도 됩니다.
 
 ```bash
 cd /home/ubuntu/web/frontend/frontend

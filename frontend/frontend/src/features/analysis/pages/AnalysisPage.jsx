@@ -5,17 +5,17 @@ export default function AnalysisPage({ handleFileSelect }) {
   return (
     <div className="page-stack compact-stack">
       <section className="page-title-block centered-title">
-        <h1>EXE 파일 분석</h1>
-        <p>의심스러운 Windows 실행 파일을 제출하여 정적 분석 결과를 확인하세요.</p>
+        <h1>악성파일 분석</h1>
+        <p>의심스러운 악성파일을 제출하여 정적 분석 결과를 확인하세요.</p>
       </section>
 
       <section className="security-card upload-card compact-upload-card">
         <div className="section-heading compact">
           <div>
             <h2>파일 업로드</h2>
-            <p>분석 대상은 EXE 파일만 허용됩니다.</p>
+            <p>분석 대상은 악성파일만 허용됩니다.</p>
           </div>
-          <span className="pill pill-blue">.exe only</span>
+          <span className="pill pill-blue">악성파일</span>
         </div>
         <FileUpload onFileSelect={handleFileSelect} />
       </section>
@@ -24,7 +24,7 @@ export default function AnalysisPage({ handleFileSelect }) {
         <article className="step-card">
           <span>1</span>
           <h3>제출</h3>
-          <p>EXE 파일을 선택하거나 드래그합니다.</p>
+          <p>악성파일을 선택하거나 드래그합니다.</p>
         </article>
         <article className="step-card">
           <span>2</span>

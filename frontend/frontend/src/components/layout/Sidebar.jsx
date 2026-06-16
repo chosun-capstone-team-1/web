@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const menuItems = [
-  { label: "EXE 분석", path: "/" },
+  { label: "파일 분석", path: "/" },
   { label: "분석기록", path: "/mypage" },
   { label: "서비스 안내", path: "/guide" },
 ];
